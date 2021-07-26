@@ -23,12 +23,16 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     var isDarkMode = false
     var itemDistance = 0f
     var chartHeight = 0f
-    private var path = Path()
     var unit = 0
-    private val charts = mutableListOf<ChartObject>()
-    private var unitVertical = 0
+    var type = ChartType.COLUMN
+    var columnRadius = 12f
+    var columnSpace = 12f
+    var columnTextSize = 18f
+    var columnTextStrong = 1f
+    var columnTextColor = Color.LTGRAY
 
-    private var touchAreaDot = mutableListOf<RectF>()
+    private var path = Path()
+    private val charts = mutableListOf<ChartObject>()
 
     private val chartPaint by lazy {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -80,12 +84,36 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paint
     }
 
+    private val columnTextPaint by lazy {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.strokeWidth = 2f
+        paint.color = Color.LTGRAY
+        paint.style = Paint.Style.STROKE
+        paint
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         val startTime = Calendar.getInstance().timeInMillis
+        when (type) {
+            ChartType.LINE -> {
+                drawLineChart(canvas)
+            }
+            ChartType.COLUMN -> {
+                drawColumnChart(canvas)
+            }
+            ChartType.CIRCLE -> {
+                drawCircleChart(canvas)
+            }
+        }
+        Log.i("timedraw", (Calendar.getInstance().timeInMillis - startTime).toString())
+    }
+
+    private fun drawLineChart(canvas: Canvas?) {
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         charts.forEach {
             if (it.data.size >= 2) {
+                it.paint.style = Paint.Style.STROKE
                 path.reset()
                 path.moveTo(it.dots[0].x, it.dots[0].y)
 
@@ -133,41 +161,49 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     )
                     canvas?.drawPath(path, it.paint)
                 }
-//                touchAreaDot.clear()
                 if (pointDotEnable) {
                     it.dots.forEach { dot ->
                         if (pointDotStrokeEnable) {
                             canvas?.drawCircle(dot.x, dot.y, dotRadius + dotStrokeSize, chartPaint)
                         }
                         canvas?.drawCircle(dot.x, dot.y, dotRadius, it.paint)
-//                    touchAreaDot.add(RectF(dot.x - 12f, dot.y - 12f, dot.x + 12f, dot.y + 12f))
                     }
                 }
             }
         }
-        Log.i("timedraw", (Calendar.getInstance().timeInMillis - startTime).toString())
     }
 
-//    @SuppressLint("ClickableViewAccessibility")
-//    override fun onTouchEvent(event: MotionEvent): Boolean {
-//        val touchX = event.x
-//        val touchY = event.y
-//
-//        when (event.action) {
-//            MotionEvent.ACTION_DOWN -> {
-//
-//            }
-//            MotionEvent.ACTION_MOVE -> {
-//
-//            }
-//            MotionEvent.ACTION_UP -> {
-//
-//            }
-//            else -> return false
-//        }
-//        invalidate()
-//        return true
-//    }
+    private fun drawColumnChart(canvas: Canvas?) {
+        columnTextPaint.apply {
+            color = columnTextColor
+            textSize = columnTextSize
+            strokeWidth = columnTextStrong
+        }
+        charts.forEach { chart ->
+            for (i in 0 until chart.dots.size) {
+                chart.paint.style = Paint.Style.FILL
+                canvas?.drawRoundRect(
+                    chart.dots[i].x - itemDistance / 2 + columnSpace / 2,
+                    chart.dots[i].y,
+                    chart.dots[i].x + itemDistance / 2 - columnSpace / 2,
+                    height.toFloat(),
+                    columnRadius,
+                    columnRadius,
+                    chart.paint
+                )
+                canvas?.drawText(
+                    chart.data[i].toString(),
+                    chart.dots[i].x - (columnTextPaint.textSize * chart.data[i].toString().length / 2) / 2,
+                    chart.dots[i].y - 12f,
+                    columnTextPaint
+                )
+            }
+        }
+    }
+
+    private fun drawCircleChart(canvas: Canvas?) {
+
+    }
 
     private fun getPoints(): List<PointF> {
         val pointArray = mutableListOf<PointF>()
@@ -204,9 +240,19 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         data: List<Float>,
         color: Int
     ) {
-        this.chartHeight = height.toFloat() - CHART_LINE_WIDTH
+        var chartHeightRevert = 0f
+        when (type) {
+            ChartType.LINE -> {
+                chartHeightRevert = height.toFloat() - CHART_LINE_WIDTH
+            }
+            ChartType.COLUMN -> {
+                chartHeightRevert = height.toFloat() - columnTextSize
+            }
+            ChartType.CIRCLE -> {
+            }
+        }
+        this.chartHeight = height.toFloat()
         itemDistance = (width.toFloat() - CHART_LINE_WIDTH * 6) / (data.size - 1)
-        unitVertical = height / itemDistance.toInt()
         val chartObject = ChartObject()
         chartObject.apply {
             this.data = data.toMutableList()
@@ -214,7 +260,7 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             dots.clear()
             for (i in data.indices) {
                 val xOffset = i * itemDistance + CHART_LINE_WIDTH * 3
-                val yOffset = chartHeight - (chartHeight * data[i] / unit)
+                val yOffset = chartHeight - (chartHeightRevert * data[i] / unit)
                 dots.add(Dot(x = xOffset, y = yOffset))
             }
             paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -226,6 +272,7 @@ class ChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 //            paint.setShadowLayer(12f, 0f, 48f, Color.argb(10, 200, 200, 200))
         }
         charts.add(chartObject)
+        invalidate()
     }
 
     companion object {
@@ -245,3 +292,7 @@ data class ChartObject(
     var paint: Paint = Paint(),
     var hsv: FloatArray = FloatArray(3),
 )
+
+enum class ChartType {
+    LINE, COLUMN, CIRCLE
+}

@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         viewBinding.chartView.apply {
             reset()
             setup(8)
-            pointDotEnable = true
-            fadeEffectEnable = false
+            pointDotEnable = false
+            fadeEffectEnable = true
             pointDotStrokeEnable = true
             isDarkMode = resources.configuration.uiMode and
                     Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         viewBinding.chartView2.apply {
             reset()
             setup(8)
-            pointDotEnable = true
-            fadeEffectEnable = false
+            pointDotEnable = false
+            fadeEffectEnable = true
             pointDotStrokeEnable = true
             isDarkMode = resources.configuration.uiMode and
                     Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         viewBinding.chartView3.apply {
             reset()
             setup(8)
-            pointDotEnable = true
-            fadeEffectEnable = false
+            pointDotEnable = false
+            fadeEffectEnable = true
             pointDotStrokeEnable = true
             isDarkMode = resources.configuration.uiMode and
                     Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
         viewBinding.chartView4.apply {
             reset()
             setup(8)
-            pointDotEnable = true
-            fadeEffectEnable = false
+            pointDotEnable = false
+            fadeEffectEnable = true
             pointDotStrokeEnable = true
             isDarkMode = resources.configuration.uiMode and
                     Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -83,22 +83,46 @@ class MainActivity : AppCompatActivity() {
         }
         viewBinding.apply {
             buttonDot.setOnClickListener {
-                chartView.pointDotEnable = !chartView.pointDotEnable
-                chartView2.pointDotEnable = !chartView2.pointDotEnable
-                chartView3.pointDotEnable = !chartView3.pointDotEnable
-                chartView4.pointDotEnable = !chartView4.pointDotEnable
+                chartView.type = ChartType.LINE
+                chartView2.type = ChartType.LINE
+                chartView3.type = ChartType.LINE
+                chartView4.type = ChartType.LINE
+                chartView.invalidate()
+                chartView2.invalidate()
+                chartView3.invalidate()
+                chartView4.invalidate()
+//                chartView.pointDotEnable = !chartView.pointDotEnable
+//                chartView2.pointDotEnable = !chartView2.pointDotEnable
+//                chartView3.pointDotEnable = !chartView3.pointDotEnable
+//                chartView4.pointDotEnable = !chartView4.pointDotEnable
             }
             buttonStroke.setOnClickListener {
-                chartView.pointDotStrokeEnable = !chartView.pointDotStrokeEnable
-                chartView2.pointDotStrokeEnable = !chartView2.pointDotStrokeEnable
-                chartView3.pointDotStrokeEnable = !chartView3.pointDotStrokeEnable
-                chartView4.pointDotStrokeEnable = !chartView4.pointDotStrokeEnable
+                chartView.type = ChartType.COLUMN
+                chartView2.type = ChartType.COLUMN
+                chartView3.type = ChartType.COLUMN
+                chartView4.type = ChartType.COLUMN
+                chartView.invalidate()
+                chartView2.invalidate()
+                chartView3.invalidate()
+                chartView4.invalidate()
+//                chartView.pointDotStrokeEnable = !chartView.pointDotStrokeEnable
+//                chartView2.pointDotStrokeEnable = !chartView2.pointDotStrokeEnable
+//                chartView3.pointDotStrokeEnable = !chartView3.pointDotStrokeEnable
+//                chartView4.pointDotStrokeEnable = !chartView4.pointDotStrokeEnable
             }
             buttonShadow.setOnClickListener {
-                chartView.fadeEffectEnable = !chartView.fadeEffectEnable
-                chartView2.fadeEffectEnable = !chartView2.fadeEffectEnable
-                chartView3.fadeEffectEnable = !chartView3.fadeEffectEnable
-                chartView4.fadeEffectEnable = !chartView4.fadeEffectEnable
+                chartView.type = ChartType.CIRCLE
+                chartView2.type = ChartType.CIRCLE
+                chartView3.type = ChartType.CIRCLE
+                chartView4.type = ChartType.CIRCLE
+                chartView.invalidate()
+                chartView2.invalidate()
+                chartView3.invalidate()
+                chartView4.invalidate()
+//                chartView.fadeEffectEnable = !chartView.fadeEffectEnable
+//                chartView2.fadeEffectEnable = !chartView2.fadeEffectEnable
+//                chartView3.fadeEffectEnable = !chartView3.fadeEffectEnable
+//                chartView4.fadeEffectEnable = !chartView4.fadeEffectEnable
             }
         }
     }

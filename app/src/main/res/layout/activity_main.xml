@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="100dp"
     android:background="?attr/colorBg"
+    android:paddingTop="100dp"
     tools:context=".MainActivity">
 
     <com.example.charts.ChartView
@@ -28,6 +28,7 @@
         android:id="@+id/chartView3"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chartView" />
@@ -36,6 +37,7 @@
         android:id="@+id/chartView4"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/chartView"
         app:layout_constraintTop_toBottomOf="@id/chartView2" />
@@ -51,8 +53,7 @@
         android:id="@+id/buttonDot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/color_chart2"
-        android:text="Dot"
+        android:text="Line"
         app:layout_constraintBottom_toBottomOf="@+id/buttonStroke"
         app:layout_constraintEnd_toStartOf="@+id/buttonStroke"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,8 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="@color/color_chart2"
-        android:text="Stroke"
+        android:text="Column"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chartView3" />
@@ -73,8 +73,7 @@
         android:id="@+id/buttonShadow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/color_chart2"
-        android:text="Shadow"
+        android:text="Circle"
         app:layout_constraintBottom_toBottomOf="@+id/buttonStroke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonStroke"
